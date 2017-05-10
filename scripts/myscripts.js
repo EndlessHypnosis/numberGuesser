@@ -14,63 +14,84 @@
 // http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html
 
 
-// Declaring Event Listeners
-
-document.querySelector("#btnClear").addEventListener("click", clearForm);
-document.querySelector("#btnGuess").addEventListener("click", guessNumber);
-document.querySelector("#btnReset").addEventListener("click", resetForm);
-document.querySelector("#btnSetRange").addEventListener("click", setRange);
-document.querySelector("#txtGuess").addEventListener("input", guessFieldChanged);
-document.querySelector("#txtMin").addEventListener("input", rangeFieldChanged);
-document.querySelector("#txtMax").addEventListener("input", rangeFieldChanged);
-
-
-
-// Global Variables & Initializers
+// Global Variables
 
 var minRange;
 var maxRange;
-var lastRandom = genRandomNumber(1, 100);
+var lastRandom;
 
 var btnClear = document.querySelector("#btnClear");
+var btnReset = document.querySelector("#btnReset");
+var btnGuess = document.querySelector("#btnGuess");
+var btnSetRange = document.querySelector("#btnSetRange");
+var txtGuess = document.querySelector("#txtGuess");
+var txtMin = document.querySelector("#txtMin");
+var txtMax = document.querySelector("#txtMax");
+var dbgRandom = document.querySelector("#dbgRandom");
+var lblGuessValidator = document.querySelector("#lblGuessValidator");
+var lblRangeValidator = document.querySelector("#lblRangeValidator");
+var lblLastGuessPre = document.querySelector("#lblLastGuessPre");
+var lblLastGuess = document.querySelector("#lblLastGuess");
+var lblLastGuessPost = document.querySelector("#lblLastGuessPost");
+var lblRangeStatement = document.querySelector("#lblRangeStatement");
+
+// Initialize
+
+lastRandom = genRandomNumber(1, 100);
 btnClear.disabled = true;
-
-document.querySelector("#btnReset").disabled = true;
-
+btnReset.disabled = true;
 //FOR DEBUGGING
-document.querySelector("#dbgRandom").innerText = "| curr answer: " + lastRandom.toString();
+dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
+
+
+// Declaring Event Listeners
+
+btnClear.addEventListener("click", clearForm);
+btnGuess.addEventListener("click", guessNumber);
+btnReset.addEventListener("click", resetForm);
+btnSetRange.addEventListener("click", setRange);
+txtGuess.addEventListener("input", guessFieldChanged);
+txtMin.addEventListener("input", rangeFieldChanged);
+txtMax.addEventListener("input", rangeFieldChanged);
+
+
+
 
 
 
 // Functions
+
+// Clears out all input boxes and validators
 function clearForm() {
-
-  document.querySelector("#txtMin").value = "";
-  document.querySelector("#txtMax").value = "";
-
-  document.querySelector("#txtGuess").value = "";
-  document.querySelector("#lblGuessValidator").innerHTML = "&nbsp;";
-  document.querySelector("#lblRangeValidator").innerHTML = "&nbsp;";
-  document.querySelector("#btnClear").disabled = true;
+  txtMin.value = "";
+  txtMax.value = "";
+  txtGuess.value = "";
+  lblGuessValidator.innerHTML = "&nbsp;";
+  lblRangeValidator.innerHTML = "&nbsp;";
+  btnClear.disabled = true;
 }
 
+// Resets the game back to initial state (1-100)
 function resetForm() {
 
-  document.querySelector("#txtMin").value = "";
-  document.querySelector("#txtMax").value = "";
+  // txtMin.value = "";
+  // txtMax.value = "";
+  //
+  // txtGuess.value = "";
+  // lblGuessValidator.innerHTML = "&nbsp;";
+  // lblRangeValidator.innerHTML = "&nbsp;";
+  // btnClear.disabled = true;
 
-  document.querySelector("#txtGuess").value = "";
-  document.querySelector("#lblGuessValidator").innerHTML = "&nbsp;";
-  document.querySelector("#lblRangeValidator").innerHTML = "&nbsp;";
-  document.querySelector("#lblLastGuessPre").innerText = "Guess a number between";
-  document.querySelector("#lblLastGuess").innerText = "1 to 100";
-  document.querySelector("#lblLastGuessPost").innerText = "Are you feeling lucky?";
-  document.querySelector("#lblRangeStatement").innerText = "Current Range: 1 to 100"
-  document.querySelector("#btnReset").disabled = true;
-  document.querySelector("#btnClear").disabled = true;
+  clearForm();
+
+  lblLastGuessPre.innerText = "Guess a number between";
+  lblLastGuess.innerText = "1 to 100";
+  lblLastGuessPost.innerText = "Are you feeling lucky?";
+  lblRangeStatement.innerText = "Current Range: 1 to 100"
+  btnReset.disabled = true;
   lastRandom = genRandomNumber(1, 100);
   //FOR DEBUGGING
-  document.querySelector("#dbgRandom").innerText = "| curr answer: " + lastRandom.toString();
+  dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
 }
 
 function setRange(wonNewMin, wonNewMax) {
@@ -81,8 +102,8 @@ function setRange(wonNewMin, wonNewMax) {
   // if parameters are undefined, we know we're using the basic set range feature
   // else we know the range was updated via a win
   if (typeof wonNewMin === 'undefined' || typeof wonNewMax === 'undefined') {
-    newMinRange = document.querySelector("#txtMin").value;
-    newMaxRange = document.querySelector("#txtMax").value;
+    newMinRange = txtMin.value;
+    newMaxRange = txtMax.value;
   } else {
     newMinRange = wonNewMin - 10;
     newMaxRange = wonNewMax + 10;
@@ -90,63 +111,63 @@ function setRange(wonNewMin, wonNewMax) {
   //since isNaN(null) returns false, we check vanilla isNaN but also after trying to parse to int.
   //Just parsing to int doesn't work because 123abc parses to an integer
   if (isNaN(parseInt(newMinRange)) || isNaN(parseInt(newMaxRange)) || isNaN(newMinRange) || isNaN(newMaxRange)) {
-    document.querySelector("#lblRangeValidator").innerHTML = "Please enter a valid number";
+    lblRangeValidator.innerHTML = "Please enter a valid number";
   } else if (parseInt(newMinRange) >= parseInt(newMaxRange)) {
-    document.querySelector("#lblRangeValidator").innerHTML = "Min Range must be less than Max Range";
+    lblRangeValidator.innerHTML = "Min Range must be less than Max Range";
   } else {
-    document.querySelector("#lblRangeValidator").innerHTML = "&nbsp;"
+    lblRangeValidator.innerHTML = "&nbsp;"
 
     resetForm();
 
-    document.querySelector("#lblLastGuess").innerText = newMinRange + " to " + newMaxRange;
-    document.querySelector("#lblRangeStatement").innerText = "Current Range: " + newMinRange + " to " + newMaxRange
+    lblLastGuess.innerText = newMinRange + " to " + newMaxRange;
+    lblRangeStatement.innerText = "Current Range: " + newMinRange + " to " + newMaxRange
 
     lastRandom = genRandomNumber(parseInt(newMinRange), parseInt(newMaxRange));
-    document.querySelector("#btnReset").disabled = false;
+    btnReset.disabled = false;
     //FOR DEBUGGING
-    document.querySelector("#dbgRandom").innerText = "| curr answer: " + lastRandom.toString();
+    dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
   }
 
 }
 
 function rangeFieldChanged() {
-  var newMinRange = document.querySelector("#txtMin").value;
-  var newMaxRange = document.querySelector("#txtMax").value;
+  var newMinRange = txtMin.value;
+  var newMaxRange = txtMax.value;
 
   if (newMinRange.length > 0 || newMaxRange.length > 0) {
-    document.querySelector("#btnClear").disabled = false;
+    btnClear.disabled = false;
   } else {
-    document.querySelector("#btnClear").disabled = true;
-    document.querySelector("#lblRangeValidator").innerHTML = "&nbsp;"
+    btnClear.disabled = true;
+    lblRangeValidator.innerHTML = "&nbsp;"
   }
 
 }
 
 function guessFieldChanged() {
-  var theGuess = document.querySelector("#txtGuess").value;
+  var theGuess = txtGuess.value;
 
   if (theGuess.length > 0) {
-    document.querySelector("#btnClear").disabled = false;
+    btnClear.disabled = false;
   } else {
-    document.querySelector("#btnClear").disabled = true;
-    document.querySelector("#lblGuessValidator").innerHTML = "&nbsp;";
+    btnClear.disabled = true;
+    lblGuessValidator.innerHTML = "&nbsp;";
   }
 }
 
 
 function guessNumber() {
 
-  var lastGuess = document.querySelector("#txtGuess").value;
+  var lastGuess = txtGuess.value;
 
 
   if (isNaN(lastGuess) || isNaN(parseInt(lastGuess))) {
-    document.querySelector("#lblGuessValidator").innerText = "Please enter a valid number";
+    lblGuessValidator.innerText = "Please enter a valid number";
   } else if (lastGuess < minRange || lastGuess > maxRange) {
-    document.querySelector("#lblGuessValidator").innerText = "Please enter a number between " + minRange + " to " + maxRange + ".";
+    lblGuessValidator.innerText = "Please enter a number between " + minRange + " to " + maxRange + ".";
   } else {
-    document.querySelector("#lblGuessValidator").innerHTML = "&nbsp;";
-    document.querySelector("#lblLastGuessPre").innerText = "Your last guess was";
-    document.querySelector("#lblLastGuess").innerText = lastGuess.toString();
+    lblGuessValidator.innerHTML = "&nbsp;";
+    lblLastGuessPre.innerText = "Your last guess was";
+    lblLastGuess.innerText = lastGuess.toString();
 
     lastGuess = parseInt(lastGuess);
 
@@ -163,13 +184,15 @@ function guessNumber() {
       txtResult = "There was an error, please reset";
     }
 
-    document.querySelector("#lblLastGuessPost").innerText = txtResult;
-    document.querySelector("#btnReset").disabled = false;
 
     if (didYouWin) {
       setRange(minRange, maxRange);
-      document.querySelector("#lblLastGuessPost").innerHTML = "BOOM! YOU WON! The range has been increased by 10 in each direction</br>still feeling lucky?";
+      lblLastGuessPost.innerHTML = "BOOM! YOU WON! The range has been increased by 10 in each direction</br>still feeling lucky?";
+    } else {
+      lblLastGuessPost.innerText = txtResult;
     }
+
+    btnReset.disabled = false;
 
   }
 }
