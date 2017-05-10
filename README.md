@@ -2,4 +2,4 @@
 
 this is the readme
 
-![Alt text](/images/_ss.jpg?raw=true "ScreenShot of App")
+![ScreenShot of App](/_ss.png?raw=true "ScreenShot of App")
