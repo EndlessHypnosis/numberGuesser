@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Number Guesser by Nick Svetnicka</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/mystyles.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-  </head>
-  <body>
-    <header>
-      <span class="text-pink text-bold text-big">Number</span>
-      <span class="text-grey text-light text-big">Guesser</span>
-    </header>
-    <main>
-      <section class="center-me">
+<head>
+  <meta charset="utf-8">
+  <title>Number Guesser by Nick Svetnicka for Turing</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/mystyles.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+
+</head>
+
+<body>
+  <header>
+    <span class="text-pink text-bold text-big">Number</span>
+    <span class="text-grey text-light text-big">Guesser</span>
+  </header>
+  <main>
+    <section class="center-me">
+      <div class="range-controls">
+
         <input type="text" id="txtMin" value="" placeholder="Min Range" />
         <input type="text" id="txtMax" value="" placeholder="Max Range" />
         <input type="button" id="btnSetRange" value="Set">
 
         <label class="text-dark-grey text-big-center" id="lblRangeStatement">Current Range: 1 to 100</label>
         <label class="validateMe" id="lblRangeValidator">&nbsp;</label>
+
+      </div>
+
+      <div class="guess-controls">
 
         <input type="text" id="txtGuess" value="" placeholder="Enter Your Guess" />
         <label class="validateMe" id="lblGuessValidator">&nbsp;</label>
@@ -29,16 +37,20 @@
           <input type="button" id="btnGuess" value="Guess">
           <input type="button" id="btnClear" value="Clear">
         </div>
-        <label class="text-dark-grey text-big-center" id="lblLastGuessPre">Guess a number between</label>
-        <label id="lblLastGuess">1 to 100</label>
-        <label class="text-dark-grey text-big-center" id="lblLastGuessPost">Are you feeling lucky?</label>
-        <input type="button" id="btnReset" value="Reset">
-      </section>
-    </main>
-    <footer>
-      &#9770; Number Guesser by Nick Svetnicka for Turing &#9881;
-      <label id="dbgRandom"></label>
-    </footer>
-    <script type="text/javascript" src="scripts/myscripts.js"></script>
-  </body>
+
+      </div>
+
+      <label class="text-dark-grey text-big-center" id="lblLastGuessPre">Guess a number between</label>
+      <label id="lblLastGuess">1 to 100</label>
+      <label class="text-dark-grey text-big-center" id="lblLastGuessPost">Are you feeling lucky?</label>
+      <input type="button" id="btnReset" value="Reset">
+    </section>
+  </main>
+  <footer>
+    &#9770; Number Guesser by Nick Svetnicka for Turing &#9881;
+    <label id="dbgRandom"></label>
+  </footer>
+  <script type="text/javascript" src="scripts/myscripts.js"></script>
+</body>
+
 </html>

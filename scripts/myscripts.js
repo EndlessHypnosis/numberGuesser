@@ -1,10 +1,6 @@
 //
 // TODO:
 //
-// Ask around and see whos good with css. need some help on styling
-// need to create readme
-// upload to git
-// refactor...add some more styling
 // put in some aria tags and generally make sure all elements of css/html that they've been teaching are there.
 // for phase 4, i could use a graphical bar 1-100% of how fast they guessed the right number. not like...in seconds, but num of guesses
 // https://css-tricks.com/css3-progress-bars/
@@ -18,7 +14,7 @@
 
 var minRange;
 var maxRange;
-var lastRandom;
+var currRandomNumber;
 
 var btnClear = document.querySelector("#btnClear");
 var btnReset = document.querySelector("#btnReset");
@@ -37,11 +33,11 @@ var lblRangeStatement = document.querySelector("#lblRangeStatement");
 
 // Initialize
 
-lastRandom = genRandomNumber(1, 100);
+currRandomNumber = genRandomNumber(1, 100);
 btnClear.disabled = true;
 btnReset.disabled = true;
 //FOR DEBUGGING
-dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
+dbgRandom.innerText = "| curr answer: " + currRandomNumber.toString();
 
 
 // Declaring Event Listeners
@@ -53,10 +49,6 @@ btnSetRange.addEventListener("click", setRange);
 txtGuess.addEventListener("input", guessFieldChanged);
 txtMin.addEventListener("input", rangeFieldChanged);
 txtMax.addEventListener("input", rangeFieldChanged);
-
-
-
-
 
 
 // Functions
@@ -73,15 +65,6 @@ function clearForm() {
 
 // Resets the game back to initial state (1-100)
 function resetForm() {
-
-  // txtMin.value = "";
-  // txtMax.value = "";
-  //
-  // txtGuess.value = "";
-  // lblGuessValidator.innerHTML = "&nbsp;";
-  // lblRangeValidator.innerHTML = "&nbsp;";
-  // btnClear.disabled = true;
-
   clearForm();
 
   lblLastGuessPre.innerText = "Guess a number between";
@@ -89,11 +72,20 @@ function resetForm() {
   lblLastGuessPost.innerText = "Are you feeling lucky?";
   lblRangeStatement.innerText = "Current Range: 1 to 100"
   btnReset.disabled = true;
-  lastRandom = genRandomNumber(1, 100);
+  currRandomNumber = genRandomNumber(1, 100);
   //FOR DEBUGGING
-  dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
+  dbgRandom.innerText = "| curr answer: " + currRandomNumber.toString();
 }
 
+// generate a random number based on min and max parameters
+function genRandomNumber(min, max) {
+  // syntax for random number: return Math.floor(Math.random()*(max-min+1)+min);
+  minRange = min;
+  maxRange = max;
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+// set a custom range for min/max
 function setRange(wonNewMin, wonNewMax) {
 
   var newMinRange;
@@ -108,6 +100,7 @@ function setRange(wonNewMin, wonNewMax) {
     newMinRange = wonNewMin - 10;
     newMaxRange = wonNewMax + 10;
   }
+
   //since isNaN(null) returns false, we check vanilla isNaN but also after trying to parse to int.
   //Just parsing to int doesn't work because 123abc parses to an integer
   if (isNaN(parseInt(newMinRange)) || isNaN(parseInt(newMaxRange)) || isNaN(newMinRange) || isNaN(newMaxRange)) {
@@ -117,19 +110,21 @@ function setRange(wonNewMin, wonNewMax) {
   } else {
     lblRangeValidator.innerHTML = "&nbsp;"
 
+    // setting the range essentially resets the game, but then we need to set the range to custom values
     resetForm();
 
     lblLastGuess.innerText = newMinRange + " to " + newMaxRange;
     lblRangeStatement.innerText = "Current Range: " + newMinRange + " to " + newMaxRange
 
-    lastRandom = genRandomNumber(parseInt(newMinRange), parseInt(newMaxRange));
+    currRandomNumber = genRandomNumber(parseInt(newMinRange), parseInt(newMaxRange));
+    // resetting the form would normally disable the reset button. we want it enabled as the new range could be reset
     btnReset.disabled = false;
     //FOR DEBUGGING
-    dbgRandom.innerText = "| curr answer: " + lastRandom.toString();
+    dbgRandom.innerText = "| curr answer: " + currRandomNumber.toString();
   }
-
 }
 
+// Listener[input]: for txtMin and txtMax
 function rangeFieldChanged() {
   var newMinRange = txtMin.value;
   var newMaxRange = txtMax.value;
@@ -140,9 +135,9 @@ function rangeFieldChanged() {
     btnClear.disabled = true;
     lblRangeValidator.innerHTML = "&nbsp;"
   }
-
 }
 
+// Listener[input]: for txtGuess
 function guessFieldChanged() {
   var theGuess = txtGuess.value;
 
@@ -154,17 +149,16 @@ function guessFieldChanged() {
   }
 }
 
-
+// Listener[click]: for btnGuess
 function guessNumber() {
 
   var lastGuess = txtGuess.value;
 
-
-  if (isNaN(lastGuess) || isNaN(parseInt(lastGuess))) {
+  if (isNaN(lastGuess) || isNaN(parseInt(lastGuess))) { // is it a valid number
     lblGuessValidator.innerText = "Please enter a valid number";
-  } else if (lastGuess < minRange || lastGuess > maxRange) {
+  } else if (lastGuess < minRange || lastGuess > maxRange) { // is it within the current range
     lblGuessValidator.innerText = "Please enter a number between " + minRange + " to " + maxRange + ".";
-  } else {
+  } else { // the guess was valid
     lblGuessValidator.innerHTML = "&nbsp;";
     lblLastGuessPre.innerText = "Your last guess was";
     lblLastGuess.innerText = lastGuess.toString();
@@ -173,35 +167,24 @@ function guessNumber() {
 
     var txtResult;
     var didYouWin = false;
-    if (lastGuess > lastRandom) {
+    if (lastGuess > currRandomNumber) {
       txtResult = "That is too high";
-    } else if (lastGuess < lastRandom) {
+    } else if (lastGuess < currRandomNumber) {
       txtResult = "That is too low";
-    } else if (lastGuess === lastRandom) {
-      txtResult = "BOOM!";
+    } else if (lastGuess === currRandomNumber) {
+      txtResult = "BOOM! YOU WON! The range has been increased by 10 in each direction</br>still feeling lucky?";
       didYouWin = true;
     } else {
       txtResult = "There was an error, please reset";
     }
 
-
+    // if they won, set new range
     if (didYouWin) {
       setRange(minRange, maxRange);
-      lblLastGuessPost.innerHTML = "BOOM! YOU WON! The range has been increased by 10 in each direction</br>still feeling lucky?";
-    } else {
-      lblLastGuessPost.innerText = txtResult;
     }
 
+    // because the setRange function resets some of the labels, we want to manually set the lblLastGuessPost after we set the range
+    lblLastGuessPost.innerHTML = txtResult;
     btnReset.disabled = false;
-
   }
-}
-
-function genRandomNumber(min, max) {
-  // syntax for random number: return Math.floor(Math.random()*(max-min+1)+min);
-  minRange = min;
-  maxRange = max;
-  return Math.floor(Math.random() * (max - min + 1) + min);
-
-  //return Math.floor((Math.random() * 100) + 1);
 }
