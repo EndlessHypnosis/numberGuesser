@@ -13,6 +13,7 @@
 // https://codepen.io/rgg/pen/QbRyOq
 // http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html
 
+
 // Declaring Event Listeners
 
 document.querySelector("#btnClear").addEventListener("click", clearForm);
@@ -31,7 +32,9 @@ var minRange;
 var maxRange;
 var lastRandom = genRandomNumber(1, 100);
 
-document.querySelector("#btnClear").disabled = true;
+var btnClear = document.querySelector("#btnClear");
+btnClear.disabled = true;
+
 document.querySelector("#btnReset").disabled = true;
 
 //FOR DEBUGGING
