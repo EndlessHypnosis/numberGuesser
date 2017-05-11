@@ -1,14 +1,17 @@
 //
 // TODO:
 //
-// put in some aria tags and generally make sure all elements of css/html that they've been teaching are there.
 // for phase 4, i could use a graphical bar 1-100% of how fast they guessed the right number. not like...in seconds, but num of guesses
 // https://css-tricks.com/css3-progress-bars/
 // https://codepen.io/rkchauhan/pen/LGgaeK
 // https://www.codecourse.com/lessons/simple-pure-css-progress-bar
 // https://codepen.io/rgg/pen/QbRyOq
+// https://codepen.io/trishasalas/pen/mfKDx
+// https://codepen.io/wesbos/pen/adQjoY
 // http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html
-
+// 1 bar could be range difficulty (how big the range is)
+// 1 bar could be player skill (like just number of guesses?)
+// 1 bar could be how close they are to the number (percentage?)
 
 // Global Variables
 
@@ -66,7 +69,6 @@ function clearForm() {
 // Resets the game back to initial state (1-100)
 function resetForm() {
   clearForm();
-
   lblLastGuessPre.innerText = "Guess a number between";
   lblLastGuess.innerText = "1 to 100";
   lblLastGuessPost.innerText = "Are you feeling lucky?";
@@ -112,11 +114,10 @@ function setRange(wonNewMin, wonNewMax) {
 
     // setting the range essentially resets the game, but then we need to set the range to custom values
     resetForm();
-
     lblLastGuess.innerText = newMinRange + " to " + newMaxRange;
     lblRangeStatement.innerText = "Current Range: " + newMinRange + " to " + newMaxRange
-
     currRandomNumber = genRandomNumber(parseInt(newMinRange), parseInt(newMaxRange));
+
     // resetting the form would normally disable the reset button. we want it enabled as the new range could be reset
     btnReset.disabled = false;
     //FOR DEBUGGING
@@ -151,7 +152,6 @@ function guessFieldChanged() {
 
 // Listener[click]: for btnGuess
 function guessNumber() {
-
   var lastGuess = txtGuess.value;
 
   if (isNaN(lastGuess) || isNaN(parseInt(lastGuess))) { // is it a valid number
@@ -162,11 +162,10 @@ function guessNumber() {
     lblGuessValidator.innerHTML = "&nbsp;";
     lblLastGuessPre.innerText = "Your last guess was";
     lblLastGuess.innerText = lastGuess.toString();
-
     lastGuess = parseInt(lastGuess);
-
     var txtResult;
     var didYouWin = false;
+
     if (lastGuess > currRandomNumber) {
       txtResult = "That is too high";
     } else if (lastGuess < currRandomNumber) {
