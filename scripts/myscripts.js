@@ -1,6 +1,9 @@
 //
 // TODO:
 //
+// break up big functions into smaller ones
+// add 'name' to form fields
+// dont use labels unless you have a 'for' on them (they are associated with an input)
 // for phase 4, i could use a graphical bar 1-100% of how fast they guessed the right number. not like...in seconds, but num of guesses
 // https://css-tricks.com/css3-progress-bars/
 // https://codepen.io/rkchauhan/pen/LGgaeK
@@ -89,12 +92,12 @@ function genRandomNumber(min, max) {
 
 // set a custom range for min/max
 function setRange(wonNewMin, wonNewMax) {
-
   var newMinRange;
   var newMaxRange;
 
   // if parameters are undefined, we know we're using the basic set range feature
   // else we know the range was updated via a win
+
   if (typeof wonNewMin === 'undefined' || typeof wonNewMax === 'undefined') {
     newMinRange = txtMin.value;
     newMaxRange = txtMax.value;
